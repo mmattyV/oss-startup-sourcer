@@ -1,0 +1,115 @@
+---
+description: Python development standards, naming conventions, and code structure
+globs:
+  - "**/*.py"
+  - "**/*.ipynb"
+alwaysApply: true
+---
+
+# Python Development Standards - VC Sourcing
+
+## Core Requirements
+
+- **Python 3.11** via conda environment `oss_sourcer`
+- **Type hints** on ALL functions and classes with return types
+- **Docstrings** following PEP 257 convention on all public APIs
+- **Preserve existing comments** when modifying files
+
+## Development Approach for VC Sourcing
+
+**Async-First:** Use async/await patterns for all API calls (OpenAI, GitHub, Exa, OSS Insight)
+**Cost-Conscious:** Track LLM usage costs throughout analysis pipeline
+**Structured Data:** Use Pydantic models for all LLM outputs and analysis results
+
+## Naming Conventions
+
+### Python Code (PEP 8 + VC Sourcing Style)
+
+| Item | Convention | Example |
+|------|------------|---------|
+| Variables & Functions | `snake_case` | `analyze_repository_sentiment`, `filter_devops_repos` |
+| Classes & Exceptions | `PascalCase` | `READMEAnalysis`, `SentimentAnalysis`, `FinalAnalysis` |
+| Constants | `UPPER_SNAKE_CASE` | `MAX_CONCURRENT_REQUESTS`, `DEFAULT_TRUNCATION_LIMIT` |
+| Private/Internal | Leading underscore | `_calculate_sentiment_score()` |
+| Boolean Variables | Verb prefixes | `is_painkiller`, `has_readme`, `can_analyze` |
+| Collections | Plural nouns | `potential_leads`, `dev_ops_collections`, `analysis_results` |
+
+### Special Rules
+
+1. **No Type Encodings**: Avoid `str_name`, `dict_data`
+2. **Reveal Intent**: `community_sentiment_scores` > `score_list`
+3. **Acronyms**: Title-case (`GitHubClient`), except constants (`OPENAI_API_KEY`)
+4. **Avoid Built-ins**: Never use `id`, `type`, `list`, `map`
+
+## Type Hints & Documentation
+
+```python
+async def analyze_repository_sentiment(
+    openai_client: AsyncOpenAI,
+    exa_client: Exa,
+    repo_name: str,
+    llm_usage: ModelUsageAsync
+) -> Optional[SentimentAnalysis]:
+    """
+    Analyze community sentiment for a GitHub repository.
+
+    Args:
+        openai_client: OpenAI client for LLM analysis
+        exa_client: Exa client for web search
+        repo_name: GitHub repository name (owner/repo format)
+        llm_usage: Usage tracker for cost monitoring
+
+    Returns:
+        SentimentAnalysis object with sentiment data, or None if analysis fails
+
+    Raises:
+        ExaAPIError: If web search operations fail
+        OpenAIError: If LLM analysis fails
+    """
+```
+
+## Import Organization
+
+```python
+# Standard library
+import asyncio
+import os
+from datetime import datetime
+from typing import Dict, List, Optional, Any
+
+# Third-party
+import aiohttp
+from openai import AsyncOpenAI
+from exa_py import Exa
+from github import Github
+from pydantic import BaseModel
+from dotenv import load_dotenv
+
+# Local imports (if using modules)
+from vc_sourcing.models import READMEAnalysis, SentimentAnalysis, FinalAnalysis
+from vc_sourcing.utils import ModelUsageAsync, truncate_content_for_llm
+```
+
+## Progress Reporting
+
+Use consistent emoji indicators:
+- ✅ Success
+- ❌ Failure
+- ⏭️ Skipped
+- ⚠️ Warning
+- 📊 Statistics
+- 🚀 Start
+- 🏁 Complete
+- 🔄 Retry
+- 💾 Checkpoint
+- 📁 File operation
+
+## Code Review Checklist
+
+- [ ] All functions have type hints and docstrings
+- [ ] Async patterns for all API calls (OpenAI, GitHub, Exa, OSS Insight)
+- [ ] Pydantic models for structured LLM outputs
+- [ ] Cost tracking for OpenAI API usage
+- [ ] Graceful error handling for API failures
+- [ ] Emoji progress indicators for user feedback
+- [ ] No API keys hardcoded in notebooks

@@ -1,0 +1,36 @@
+---
+description: API client setup and configuration patterns for VC sourcing pipeline
+globs:
+  - "**/*.py"
+  - "**/*.ipynb"
+alwaysApply: true
+---
+
+# VC Sourcing API Client Setup
+
+## Required APIs and Tools
+
+**Core APIs:**
+- **OpenAI API** - LLM analysis (o4-mini model for structured output)
+- **Exa API** - Web research for community sentiment  
+- **GitHub API** - Repository data and README analysis
+- **OSS Insight API** - DevOps repository discovery
+
+**Environment Variables:**
+```env
+OPENAI_PROJECT_KEY="your-openai-key"
+EXA_API_KEY="your-exa-api-key"  
+GITHUB_TOKEN="your-github-personal-access-token"
+```
+
+**Dependencies:**
+```bash
+pip install exa-py PyGithub openai aiohttp pydantic python-dotenv
+```
+
+## Client Patterns
+
+- Use `AsyncOpenAI` for all LLM calls with structured output
+- Use `aiohttp.ClientSession` for OSS Insight API requests
+- Handle API rate limits and errors gracefully
+- Track costs with `ModelUsageAsync` for OpenAI calls

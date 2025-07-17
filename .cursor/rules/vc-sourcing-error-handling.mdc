@@ -1,0 +1,46 @@
+---
+description: Error handling patterns and cost tracking for VC sourcing pipeline
+globs:
+  - "**/*.py"
+  - "**/*.ipynb"
+alwaysApply: true
+---
+
+# VC Sourcing Error Handling & Cost Tracking
+
+## Cost Management
+
+**Track All LLM Usage:** Use `ModelUsageAsync` to monitor OpenAI API costs
+**Report Costs:** Display total analysis cost at pipeline completion
+**Optimize Models:** Use `o4-mini` for cost-effective structured analysis
+
+## API Error Handling Strategy
+
+**Graceful Degradation:** Continue pipeline execution with partial data when individual APIs fail
+
+**GitHub API Errors:**
+- Rate limits - implement backoff
+- Missing repositories/READMEs - log and skip
+- Invalid tokens - fail fast with clear error
+
+**Exa API Errors:**
+- Search failures - continue without sentiment data
+- No results - log warning but proceed
+- Rate limits - retry with exponential backoff
+
+**OpenAI API Errors:**
+- Rate limits - exponential backoff (max 3 retries)
+- Invalid structured output - return None and continue
+- Model errors - log and continue with partial analysis
+
+## Batch Processing Resilience
+
+**Concurrency Control:** Use `asyncio.Semaphore` to limit concurrent API calls
+**Exception Isolation:** Use `asyncio.gather(return_exceptions=True)` to prevent single failures from stopping batch
+**Progress Tracking:** Report successful vs failed analyses
+
+## Data Validation
+
+**Input Validation:** Verify OSS Insight data has required fields before processing
+**Output Validation:** Check analysis completeness and report percentages
+**Fallback Scoring:** Calculate scores even with partial analysis data

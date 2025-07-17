@@ -1,0 +1,46 @@
+---
+description: Analysis pipeline patterns and scoring system for VC sourcing
+globs:
+  - "**/*.py"
+  - "**/*.ipynb"
+alwaysApply: true
+---
+
+# VC Sourcing Pipeline & Scoring
+
+## Pipeline Architecture
+
+**4-Phase Approach:**
+1. **Discovery** - Filter DevOps repos from OSS Insight trending data
+2. **Enrichment** - Gather README and community data via GitHub/Exa APIs  
+3. **Analysis** - LLM analysis of README quality and community sentiment
+4. **Scoring** - Multi-factor scoring system with transparent rubric
+
+## Repository Filtering
+
+**Source:** OSS Insight `/trends/repos` endpoint
+**Filter:** Match `collection_names` against DevOps collections (identified by LLM)
+**Output:** Deduplicated dictionary of potential leads
+
+## Scoring Framework
+
+**Transparent Multi-Factor Rubric:**
+- **Popularity** - GitHub stars (normalized)
+- **README Quality** - Clarity score, painkiller vs vitamin assessment
+- **Time-to-Value** - How quickly developers can get results
+- **Community Sentiment** - HackerNews/Reddit sentiment analysis
+
+## Parallel Processing
+
+**Concurrent Analysis:** Run README and sentiment analysis in parallel using `asyncio.gather()`
+**Graceful Degradation:** Continue with partial data if some analyses fail
+**Cost Tracking:** Monitor OpenAI API usage throughout pipeline
+
+## Progress Reporting
+
+Use emoji indicators for clear status tracking:
+- 🔍 Analyzing
+- ✅ Success  
+- ⚠️ Warning
+- ❌ Failure
+- 📊 Final scoring

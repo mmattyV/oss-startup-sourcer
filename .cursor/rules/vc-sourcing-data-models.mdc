@@ -1,0 +1,40 @@
+---
+description: Pydantic models and LLM structured output patterns for VC analysis
+globs:
+  - "**/*.py"
+  - "**/*.ipynb"
+alwaysApply: true
+---
+
+# VC Sourcing Data Models & Analysis
+
+## Structured Data Models
+
+Use **Pydantic models** for all LLM outputs:
+
+**Core Models:**
+- `READMEAnalysis` - Clarity score, problem solved, time-to-wow, painkiller vs vitamin
+- `SentimentAnalysis` - Community sentiment, key quotes, criticisms  
+- `FinalAnalysis` - Container for all analysis results plus calculated score
+
+## LLM Analysis Framework
+
+**Structured Output:** Always use `call_openai_structured()` with Pydantic models
+**Model:** Use `o4-mini` for cost-effective structured analysis
+**Prompts:** Create system prompts that position LLM as "expert VC analyst"
+
+## Analysis Components
+
+**README Analysis:**
+- Assess clarity and problem definition
+- Estimate time-to-value for developers
+- Identify if it solves "painkiller" vs "vitamin" problems
+
+**Community Sentiment:**
+- Search HackerNews/Reddit via Exa API
+- Extract sentiment and key community feedback
+- Identify common criticisms
+
+**Content Handling:**
+- Truncate content to fit LLM context limits (15k chars)
+- Handle missing/corrupted data gracefully
