@@ -247,7 +247,7 @@ def main():
         <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #764ba2, #667eea); 
                    border-radius: 15px; margin: 1rem 0.5rem; box-shadow: 0 4px 12px rgba(118, 75, 162, 0.3);">
             <div style="color: white; font-size: 2.2rem; font-weight: bold;">📊 {avg_score:.1f}</div>
-            <div style="color: rgba(255,255,255,0.8); font-size: 1rem;">Avg Score</div>
+            <div style="color: rgba(255,255,255,0.8); font-size: 1rem;">Average Score</div>
         </div>
         """, unsafe_allow_html=True)
     
